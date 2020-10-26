@@ -29,7 +29,15 @@
                     </v-btn>
                 </v-row>
                 <v-row>
+                    <v-col v-if="error">
+                        <v-card>
+                            <v-card-title>{{errorBanner.message}}</v-card-title>
+                            <v-card-subtitle>{{errorBanner.action}}</v-card-subtitle>
+                            <v-card-text>Status: {{errorBanner.status}}</v-card-text>
+                        </v-card>
+                    </v-col>
                     <v-col
+                            v-else
                             v-for="banner in banners.data"
                             :key="banner.id"
                             cols="3"
@@ -55,19 +63,27 @@
             return {
                 campaignId: '',
                 loading: false,
-                banners: {}
+                banners: {},
+                error: false,
+                errorBanner: {}
             }
         },
         methods: {
             searchCampaignId() {
+                this.error = false
                 this.loading = true
                 console.log(this.campaignId)
                 axios
-                    .get('http://localhost:5000/campaigns/'+ this.campaignId.toString())
-                    .then(response => (
-                            this.banners = response,
-                            this.loading = false
-                    ))
+                    .get('http://localhost:5000/campaigns/' + this.campaignId.toString())
+                    .then(response => {
+                        console.log(response)
+                        this.banners = response
+                        this.loading = false
+                    }).catch((eer) => {
+                    this.errorBanner = eer.response.data
+                    this.error = true
+                    this.loading = false
+                })
             }
         }
     }
