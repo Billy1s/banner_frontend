@@ -74,7 +74,7 @@
                 this.loading = true
                 console.log(this.campaignId)
                 axios
-                    .get('http://localhost:5000/campaigns/' + this.campaignId.toString())
+                    .get('https://n12rztq0gb.execute-api.eu-west-1.amazonaws.com/dev/campaigns/' + this.campaignId.toString())
                     .then(response => {
                         console.log(response)
                         this.banners = response
